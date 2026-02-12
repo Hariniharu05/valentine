@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine Surprise</title>
 
 <style>
 body{
   margin:0;
-  font-family:Arial;
+  font-family:Arial, sans-serif;
   text-align:center;
   background:pink;
-  overflow:hidden;
+  overflow-x:hidden;
 }
 
 /* Curtain Opening Animation */
@@ -28,10 +29,29 @@ body{
   100%{transform:scaleY(0);}
 }
 
+/* Curtain Close Animation for Page 5 */
+#curtainClose{
+  position:fixed;
+  width:100%;
+  height:0%;
+  background:pink;
+  top:0;
+  left:0;
+  z-index:9999;
+  pointer-events:none;
+}
+
+/* Define the curtain slide-down animation */
+@keyframes closeCurtain{
+  0%{height:0%;}
+  100%{height:100%;}
+}
+
 /* Pages */
 .page{
   display:none;
-  padding-top:120px;
+  padding:100px 20px 50px 20px;
+  box-sizing:border-box;
 }
 
 /* Buttons */
@@ -44,11 +64,17 @@ button{
   color:white;
   cursor:pointer;
   margin-top:20px;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.1);
 }
 
 /* Meter */
 #meterBox{
   width:70%;
+  max-width:400px;
   margin:20px auto;
   background:white;
   border-radius:20px;
@@ -61,6 +87,7 @@ button{
   background:#ff0066;
   color:white;
   line-height:25px;
+  transition:width 0.3s;
 }
 
 /* Fade animation */
@@ -76,6 +103,8 @@ button{
 /* Photo animation */
 .photo{
   border-radius:20px;
+  width:80%;
+  max-width:300px;
   animation:float 3s ease-in-out infinite alternate;
 }
 
@@ -102,6 +131,31 @@ button{
 @keyframes rise{
   0%{transform:translateY(100vh);opacity:1;}
   100%{transform:translateY(-10vh);opacity:0;}
+}
+
+/* Responsive Text */
+h1,h2{
+  margin:10px;
+  word-wrap:break-word;
+}
+
+@media screen and (max-width:768px){
+  h1{
+    font-size:6vw;
+  }
+  h2{
+    font-size:5vw;
+  }
+  #meterBox{
+    width:90%;
+  }
+  .photo{
+    width:90%;
+  }
+  button{
+    font-size:14px;
+    padding:10px 20px;
+  }
 }
 </style>
 </head>
@@ -131,7 +185,7 @@ button{
 <div id="page3" class="page fade">
   <h2>Actually… Onnu illa Summa dhan😜</h2>
   <div id="prankContent" style="display:none;">
-    <img src="funny.jpg" width="260">
+    <img src="funny.jpg" class="photo">
     <p>Click Next 😂</p>
     <button onclick="goPage4()">Next</button>
   </div>
@@ -147,16 +201,19 @@ button{
 <!-- Page 5 -->
 <div id="page5" class="page fade">
   <h1>First Valentine’s, first of forever💞</h1>
-  <img src="ourphoto.jpeg" width="260" class="photo">
+  <img src="ourphoto.jpeg" class="photo">
 </div>
 
 <div id="hearts"></div>
+<div id="curtainClose"></div>
 
 <script>
 const loadingSound=document.getElementById("loadingSound");
 const funnySound=document.getElementById("funnySound");
 const loveMusic=document.getElementById("loveMusic");
 const meter=document.getElementById("meter");
+const heartsContainer=document.getElementById("hearts");
+const curtainClose=document.getElementById("curtainClose");
 
 function safePlay(audio){
   audio.play().catch(()=>{});
@@ -202,11 +259,22 @@ function goPage4(){
 function goPage5(){
   show("page5");
   startHearts();
+
+  // Auto-close page 5 after 15 seconds
+  setTimeout(()=>{
+    // Start curtain close animation
+    curtainClose.style.animation="closeCurtain 2s forwards";
+
+    // Stop music
+    loveMusic.pause();
+
+    // Stop hearts
+    heartsContainer.innerHTML="";
+  },15000); // 15 seconds
 }
 
 function startHearts(){
-  const container=document.getElementById("hearts");
-  container.innerHTML="";
+  heartsContainer.innerHTML="";
   for(let i=0;i<60;i++){
     let heart=document.createElement("div");
     heart.className="heart";
@@ -215,7 +283,7 @@ function startHearts(){
     heart.style.fontSize=(Math.random()*25 + 15)+"px";
     heart.style.animationDuration=(Math.random()*3 + 4)+"s";
     heart.style.animationDelay=(Math.random()*5)+"s";
-    container.appendChild(heart);
+    heartsContainer.appendChild(heart);
   }
 }
 </script>
