@@ -14,19 +14,23 @@ body{
   overflow-x:hidden;
 }
 
-/* Curtain Opening Animation */
+/* Theater-style curtain for first screen (landscape) */
 #curtain{
   position:fixed;
-  width:100%;
-  height:100%;
+  width:90%;       /* landscape width */
+  height:40%;      /* shorter height to look like theater screen */
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scaleY(1);
   background:#ff4d88;
   z-index:9999;
+  border-radius:15px;
   animation:openCurtain 2s forwards;
 }
 
 @keyframes openCurtain{
-  0%{transform:scaleY(1);}
-  100%{transform:scaleY(0);}
+  0%{transform:translate(-50%,-50%) scaleY(1);}
+  100%{transform:translate(-50%,-50%) scaleY(0);}
 }
 
 /* Curtain Close Animation for Page 5 */
@@ -223,27 +227,26 @@ function show(id){
   document.getElementById(id).style.display="block";
 }
 
-// Page 2 with 15-second meter
+// Page 2: meter fills over 15 seconds + loading music
 function goPage2(){
   show("page2");
   safePlay(loadingSound);
-  setTimeout(()=>{loadingSound.pause();},5000);
 
   let width=0;
   const totalTime=15000; // 15 seconds
   const intervalTime=100; // update every 0.1s
-  const increment=100/(totalTime/intervalTime); // percentage per step
+  const increment=100/(totalTime/intervalTime); // % per step
 
   const interval=setInterval(()=>{
+    width+=increment;
     if(width>=100){
+      width=100;
       clearInterval(interval);
+      loadingSound.pause();
       setTimeout(goPage3,500);
-    }else{
-      width+=increment;
-      if(width>100) width=100;
-      meter.style.width=width+"%";
-      meter.innerHTML=Math.floor(width)+"%";
     }
+    meter.style.width=width+"%";
+    meter.innerHTML=Math.floor(width)+"%";
   }, intervalTime);
 }
 
@@ -290,4 +293,3 @@ function startHearts(){
 
 </body>
 </html>
-
