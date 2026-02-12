@@ -1,144 +1,237 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Love Project</title>
+<meta charset="UTF-8">
+<title>Valentine Surprise</title>
 
 <style>
 body{
   margin:0;
-  background:pink;
-  font-family:Arial, sans-serif;
+  font-family:Arial;
   text-align:center;
+  background:pink;
   overflow:hidden;
 }
 
 /* Pages */
 .page{
   display:none;
-  height:100vh;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-}
-
-.active{
-  display:flex;
-}
-
-/* 🎭 Landscape Theater Screen */
-.theater{
-  width:100%;
-  height:60vh;   /* Only 60% height (landscape look) */
-  background:hotpink;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-  border-bottom-left-radius:50px;
-  border-bottom-right-radius:50px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.3);
-}
-
-/* Meter */
-.meter-box{
-  width:80%;
-  background:white;
-  border-radius:20px;
-  overflow:hidden;
-  margin-top:20px;
-}
-
-.meter{
-  height:30px;
-  width:0%;
-  background:red;
-  transition:width 0.1s linear;
+  padding-top:120px;
 }
 
 /* Button */
 button{
-  padding:10px 20px;
-  font-size:18px;
+  padding:12px 25px;
+  font-size:16px;
   border:none;
-  border-radius:20px;
-  background:red;
+  border-radius:25px;
+  background:#ff0066;
   color:white;
-  margin-top:20px;
   cursor:pointer;
+  margin-top:20px;
+}
+
+/* Countdown */
+#count{
+  font-size:80px;
+  font-weight:bold;
+  margin-top:200px;
+}
+
+/* Meter */
+#meterBox{
+  width:70%;
+  margin:20px auto;
+  background:white;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+#meter{
+  width:0%;
+  height:25px;
+  background:#ff0066;
+  color:white;
+  line-height:25px;
+}
+
+/* Floating Photo */
+.photo{
+  border-radius:20px;
+  animation:float 3s ease-in-out infinite alternate;
+}
+
+@keyframes float{
+  from{transform:translateY(0);}
+  to{transform:translateY(-20px);}
+}
+
+/* Hearts */
+#hearts{
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  pointer-events:none;
+}
+
+.heart{
+  position:absolute;
+  animation:rise linear infinite;
+}
+
+@keyframes rise{
+  0%{transform:translateY(100vh);opacity:1;}
+  100%{transform:translateY(-10vh);opacity:0;}
 }
 </style>
 </head>
-
 <body>
 
-<!-- PAGE 1 -->
-<div id="page1" class="page active">
-  <div class="theater">
-    <h1>Welcome My Love 💞</h1>
-    <button onclick="startLove()">Start</button>
-  </div>
+<audio id="loadingSound" src="loading.mp3"></audio>
+<audio id="funnySound" src="funny.mp3"></audio>
+<audio id="loveMusic" src="love.mp3" loop></audio>
+
+<!-- 1️⃣ Countdown Page -->
+<div id="page1" class="page" style="display:block;">
+  <div id="count">1</div>
 </div>
 
-<!-- PAGE 2 -->
-<div id="page2" class="page">
-  <h2>Loading Love Meter... ❤️</h2>
-
-  <div class="meter-box">
-    <div id="meter" class="meter"></div>
-  </div>
-
-  <!-- Next button hidden first -->
-  <button id="nextBtn" style="display:none;" onclick="nextPage()">Next 💕</button>
+<!-- 2️⃣ We Need To Talk -->
+<div id="page2" class="page">>
+  <h1>We Need To Talk...😤</h1>
+  <button onclick="goPage3()">Next</button>
 </div>
 
-<!-- PAGE 3 -->
+<!-- 3️⃣ Loading Page -->
 <div id="page3" class="page">
-  <h1>LOVE YOU MAMA💞</h1>
+  <h2>Checking Relationship Status...</h2>
+  <div id="meterBox">
+    <div id="meter">0%</div>
+  </div>
+  <div id="loadingNext" style="display:none;">
+    <button onclick="goPage4()">Next</button>
+  </div>
 </div>
 
-<!-- MUSIC -->
-<audio id="bgMusic" src="loading.mp3"></audio>
+<!-- 4️⃣ Prank Page -->
+<div id="page4" class="page">
+  <h2>Actually… Onnu illa Summa dhan😜</h2>
+  <div id="prankContent" style="display:none;">
+    <img src="funny.jpg" width="260">
+    <p>Click Next 😂</p>
+    <button onclick="goPage5()">Next</button>
+  </div>
+</div>
+
+<!-- 5️⃣ Valentine Page -->
+<div id="page5" class="page">
+  <h1>Happy Valentine’s Day ❤️</h1>
+  <h2>LOVE YOU MAMA🫂 </h2>
+  <button onclick="goPage6()">Next</button>
+</div>
+
+<!-- 6️⃣ Photo Page -->
+<div id="page6" class="page">
+  <h1>vFirst Valentine’s, first of forever. 💞</h1>
+  <img src="ourphoto.jpeg" width="260" class="photo">
+</div>
+
+<div id="hearts"></div>
 
 <script>
 
-let music = document.getElementById("bgMusic");
+const meter=document.getElementById("meter");
+const loadingSound=document.getElementById("loadingSound");
+const funnySound=document.getElementById("funnySound");
+const loveMusic=document.getElementById("loveMusic");
 
-function startLove(){
-
-  document.getElementById("page1").classList.remove("active");
-  document.getElementById("page2").classList.add("active");
-
-  let meter = document.getElementById("meter");
-
-  // Music start immediately
-  music.play();
-
-  let width = 0;
-
-  let interval = setInterval(function(){
-
-    if(width >= 100){
-      clearInterval(interval);
-
-      // Stop music when meter finishes
-      music.pause();
-      music.currentTime = 0;
-
-      // Show Next button AFTER loading
-      document.getElementById("nextBtn").style.display="inline-block";
-    }
-    else{
-      width += 100/150;  // 15 sec
-      meter.style.width = width + "%";
-    }
-
-  },100);
+function show(id){
+  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+  document.getElementById(id).style.display="block";
 }
 
-function nextPage(){
-  document.getElementById("page2").classList.remove("active");
-  document.getElementById("page3").classList.add("active");
+function safePlay(audio){
+  audio.play().catch(()=>{});
+}
+
+/* Countdown 1 to 5 */
+let count=1;
+let counter=setInterval(()=>{
+  document.getElementById("count").innerText=count;
+  if(count==5){
+    clearInterval(counter);
+    setTimeout(()=>show("page2"),1000);
+  }
+  count++;
+},1000);
+
+/* Go to Loading */
+function goPage3(){
+  show("page3");
+  startLoading();
+}
+
+/* 15 sec loading */
+function startLoading(){
+  let width=0;
+  let duration=15000; // 15 sec
+  let intervalTime=150; // smoother animation
+  let totalSteps=duration/intervalTime;
+  let step=100/totalSteps;
+
+  safePlay(loadingSound);
+
+  let interval=setInterval(()=>{
+    if(width>=100){
+      clearInterval(interval);
+      loadingSound.pause();
+      document.getElementById("loadingNext").style.display="block";
+    }else{
+      width+=step;
+      meter.style.width=width+"%";
+      meter.innerHTML=Math.floor(width)+"%";
+    }
+  },intervalTime);
+}
+
+/* Prank */
+function goPage4(){
+  show("page4");
+  setTimeout(()=>{
+    document.getElementById("prankContent").style.display="block";
+    safePlay(funnySound);
+  },2000);
+}
+
+/* Valentine */
+function goPage5(){
+  show("page5");
+  safePlay(loveMusic);
+  startHearts();
+}
+
+/* Photo */
+function goPage6(){
+  show("page6");
+  startHearts();
+}
+
+/* Hearts full screen random */
+function startHearts(){
+  const container=document.getElementById("hearts");
+  container.innerHTML="";
+  for(let i=0;i<60;i++){
+    let heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="❤️";
+    heart.style.left=Math.random()*100+"%";
+    heart.style.fontSize=(Math.random()*25 + 15)+"px";
+    heart.style.animationDuration=(Math.random()*3 + 4)+"s";
+    heart.style.animationDelay=(Math.random()*5)+"s";
+    container.appendChild(heart);
+  }
 }
 
 </script>
