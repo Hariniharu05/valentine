@@ -2,12 +2,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Valentine Surprise</title>
 
 <style>
 body{
   margin:0;
-  font-family:Arial;
+  font-family:Arial, sans-serif;
   text-align:center;
   background:pink;
   overflow:hidden;
@@ -33,7 +34,7 @@ button{
 
 /* Countdown */
 #count{
-  font-size:80px;
+  font-size:70px;
   font-weight:bold;
   margin-top:200px;
 }
@@ -59,6 +60,8 @@ button{
 .photo{
   border-radius:20px;
   animation:float 3s ease-in-out infinite alternate;
+  width:80%;
+  max-width:300px;
 }
 
 @keyframes float{
@@ -86,7 +89,7 @@ button{
   100%{transform:translateY(-10vh);opacity:0;}
 }
 
-/* Closing Effect */
+/* Closing Screen */
 #closingScreen{
   position:fixed;
   top:0;
@@ -98,17 +101,47 @@ button{
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:28px;
+  font-size:24px;
   opacity:0;
   transform:scaleY(0);
   transform-origin:top;
   transition:all 2s ease-in-out;
   z-index:9999;
+  padding:20px;
+  text-align:center;
 }
 
 #closingScreen.show{
   opacity:1;
   transform:scaleY(1);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px){
+
+  #count{
+    font-size:50px;
+    margin-top:150px;
+  }
+
+  h1{
+    font-size:22px;
+    padding:0 15px;
+  }
+
+  h2{
+    font-size:18px;
+    padding:0 15px;
+  }
+
+  button{
+    font-size:14px;
+    padding:10px 20px;
+  }
+
+  #meterBox{
+    width:90%;
+  }
 }
 </style>
 </head>
@@ -123,15 +156,15 @@ button{
   <div id="count">1</div>
 </div>
 
-<!-- 2 We Need To Talk -->
+<!-- 2 Build Up -->
 <div id="page2" class="page">
-  <h1>We Need To Talk...😤</h1>
+  <h1>Something Important...</h1>
   <button onclick="goPage3()">Next</button>
 </div>
 
 <!-- 3 Loading -->
 <div id="page3" class="page">
-  <h2>“Something Special Is Loading…” 💝</h2>
+  <h2>Something Special Is Loading… 💝</h2>
   <div id="meterBox">
     <div id="meter">0%</div>
   </div>
@@ -142,10 +175,10 @@ button{
 
 <!-- 4 Prank -->
 <div id="page4" class="page">
-  <h2>Actually… Onnu illa Summa dhan 😜</h2>
+  <h2>Actually… Onnu illa Summa dhan😜</h2>
   <div id="prankContent" style="display:none;">
-    <img src="funny.jpg" width="260">
-    <p>Click Next 😂</p>
+    <img src="funny.jpg" class="photo">
+    <p>Click Next😂</p>
     <button onclick="goPage5()">Next</button>
   </div>
 </div>
@@ -153,14 +186,13 @@ button{
 <!-- 5 Valentine -->
 <div id="page5" class="page">
   <h1>Happy Valentine’s Day ❤️</h1>
-  <h2>LOVE YOU MAMA🫂</h2>
   <button onclick="goPage6()">Next</button>
 </div>
 
 <!-- 6 Photo -->
 <div id="page6" class="page">
-  <h1> First Valentine’s,first of forever💞</h1>
-  <img src="ourphoto.jpeg" width="260" class="photo">
+  <h1> First Valentine’s,first of forever. 💞</h1>
+  <img src="ourphoto.jpeg" class="photo">
 </div>
 
 <!-- Closing Screen -->
@@ -242,12 +274,10 @@ function goPage6(){
   show("page6");
   startHearts();
 
-  // 15 seconds after photo → closing animation
   setTimeout(()=>{
     document.getElementById("closingScreen").classList.add("show");
   },15000);
 
-  // After 20 seconds → exit website
   setTimeout(()=>{
     window.location.href="https://google.com";
   },20000);
@@ -273,5 +303,3 @@ function startHearts(){
 
 </body>
 </html>
-
-
