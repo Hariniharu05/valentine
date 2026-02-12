@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Valentine Surprise</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  text-align:center;
+  background:pink;
+  overflow:hidden;
+}
+
+/* Curtain Opening Animation */
+#curtain{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:#ff4d88;
+  z-index:9999;
+  animation:openCurtain 2s forwards;
+}
+
+@keyframes openCurtain{
+  0%{transform:scaleY(1);}
+  100%{transform:scaleY(0);}
+}
+
+/* Pages */
+.page{
+  display:none;
+  padding-top:120px;
+}
+
+/* Buttons */
+button{
+  padding:12px 25px;
+  font-size:16px;
+  border:none;
+  border-radius:25px;
+  background:#ff0066;
+  color:white;
+  cursor:pointer;
+  margin-top:20px;
+}
+
+/* Meter */
+#meterBox{
+  width:70%;
+  margin:20px auto;
+  background:white;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+#meter{
+  width:0%;
+  height:25px;
+  background:#ff0066;
+  color:white;
+  line-height:25px;
+}
+
+/* Fade animation */
+.fade{
+  animation:fadeIn 1s;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+/* Photo animation */
+.photo{
+  border-radius:20px;
+  animation:float 3s ease-in-out infinite alternate;
+}
+
+@keyframes float{
+  from{transform:translateY(0);}
+  to{transform:translateY(-20px);}
+}
+
+/* Hearts */
+#hearts{
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  pointer-events:none;
+}
+
+.heart{
+  position:absolute;
+  animation:rise linear infinite;
+}
+
+@keyframes rise{
+  0%{transform:translateY(100vh);opacity:1;}
+  100%{transform:translateY(-10vh);opacity:0;}
+}
+</style>
+</head>
+<body>
+
+<div id="curtain"></div>
+
+<audio id="loadingSound" src="loading.mp3"></audio>
+<audio id="funnySound" src="funny.mp3"></audio>
+<audio id="loveMusic" src="love.mp3" loop></audio>
+
+<!-- Page 1 -->
+<div id="page1" class="page fade" style="display:block;">
+  <h1>⚠️ We Need To Talk...</h1>
+  <button onclick="goPage2()">Next</button>
+</div>
+
+<!-- Page 2 -->
+<div id="page2" class="page fade">
+  <h2>Checking Relationship Status...</h2>
+  <div id="meterBox">
+    <div id="meter">0%</div>
+  </div>
+</div>
+
+<!-- Page 3 -->
+<div id="page3" class="page fade">
+  <h2>Actually… Onnu illa Summa dhan😜</h2>
+  <div id="prankContent" style="display:none;">
+    <img src="funny.jpg" width="260">
+    <p>Click Next 😂</p>
+    <button onclick="goPage4()">Next</button>
+  </div>
+</div>
+
+<!-- Page 4 -->
+<div id="page4" class="page fade">
+  <h1>Happy Valentine’s Day ❤️</h1>
+  <h2>I LOVE YOU💞</h2>
+  <button onclick="goPage5()">Next</button>
+</div>
+
+<!-- Page 5 -->
+<div id="page5" class="page fade">
+  <h1>First Valentine’s, first of forever💞</h1>
+  <img src="ourphoto.jpeg" width="260" class="photo">
+</div>
+
+<div id="hearts"></div>
+
+<script>
+const loadingSound=document.getElementById("loadingSound");
+const funnySound=document.getElementById("funnySound");
+const loveMusic=document.getElementById("loveMusic");
+const meter=document.getElementById("meter");
+
+function safePlay(audio){
+  audio.play().catch(()=>{});
+}
+
+function show(id){
+  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+  document.getElementById(id).style.display="block";
+}
+
+function goPage2(){
+  show("page2");
+  safePlay(loadingSound);
+  setTimeout(()=>{loadingSound.pause();},5000);
+
+  let width=0;
+  let interval=setInterval(()=>{
+    if(width>=100){
+      clearInterval(interval);
+      setTimeout(goPage3,500);
+    }else{
+      width++;
+      meter.style.width=width+"%";
+      meter.innerHTML=width+"%";
+    }
+  },30);
+}
+
+function goPage3(){
+  show("page3");
+  setTimeout(()=>{
+    document.getElementById("prankContent").style.display="block";
+    safePlay(funnySound);
+  },2000);
+}
+
+function goPage4(){
+  show("page4");
+  safePlay(loveMusic);
+  startHearts();
+}
+
+function goPage5(){
+  show("page5");
+  startHearts();
+}
+
+function startHearts(){
+  const container=document.getElementById("hearts");
+  container.innerHTML="";
+  for(let i=0;i<60;i++){
+    let heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="❤️";
+    heart.style.left=Math.random()*100+"%";
+    heart.style.fontSize=(Math.random()*25 + 15)+"px";
+    heart.style.animationDuration=(Math.random()*3 + 4)+"s";
+    heart.style.animationDelay=(Math.random()*5)+"s";
+    container.appendChild(heart);
+  }
+}
+</script>
+
+</body>
+</html>
