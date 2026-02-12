@@ -13,6 +13,7 @@ body{
   overflow:hidden;
 }
 
+/* Pages */
 .page{
   display:none;
   height:100vh;
@@ -25,6 +26,21 @@ body{
   display:flex;
 }
 
+/* 🎭 Landscape Theater Screen */
+.theater{
+  width:100%;
+  height:60vh;   /* Only 60% height (landscape look) */
+  background:hotpink;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  border-bottom-left-radius:50px;
+  border-bottom-right-radius:50px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Meter */
 .meter-box{
   width:80%;
   background:white;
@@ -40,6 +56,7 @@ body{
   transition:width 0.1s linear;
 }
 
+/* Button */
 button{
   padding:10px 20px;
   font-size:18px;
@@ -57,8 +74,10 @@ button{
 
 <!-- PAGE 1 -->
 <div id="page1" class="page active">
-  <h1>Welcome My Love 💞</h1>
-  <button onclick="startLove()">Start</button>
+  <div class="theater">
+    <h1>Welcome My Love 💞</h1>
+    <button onclick="startLove()">Start</button>
+  </div>
 </div>
 
 <!-- PAGE 2 -->
@@ -69,6 +88,7 @@ button{
     <div id="meter" class="meter"></div>
   </div>
 
+  <!-- Next button hidden first -->
   <button id="nextBtn" style="display:none;" onclick="nextPage()">Next 💕</button>
 </div>
 
@@ -91,7 +111,7 @@ function startLove(){
 
   let meter = document.getElementById("meter");
 
-  // Start music immediately (because button clicked)
+  // Music start immediately
   music.play();
 
   let width = 0;
@@ -101,18 +121,19 @@ function startLove(){
     if(width >= 100){
       clearInterval(interval);
 
-      // Stop music exactly when meter completes
+      // Stop music when meter finishes
       music.pause();
       music.currentTime = 0;
 
+      // Show Next button AFTER loading
       document.getElementById("nextBtn").style.display="inline-block";
     }
     else{
-      width += 100/150;  // 150 steps = 15 seconds
+      width += 100/150;  // 15 sec
       meter.style.width = width + "%";
     }
 
-  },100); // 100ms × 150 = 15 seconds
+  },100);
 }
 
 function nextPage(){
