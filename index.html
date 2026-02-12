@@ -1,294 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Surprise</title>
+<title>Love Project</title>
 
 <style>
 body{
   margin:0;
+  background:pink;
   font-family:Arial, sans-serif;
   text-align:center;
-  background:pink;
-  overflow-x:hidden;
-}
-
-/* Theater-style curtain for first screen (landscape) */
-#curtain{
-  position:fixed;
-  width:90%;       /* landscape width */
-  height:40%;      /* shorter height to look like theater screen */
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%) scaleY(1);
-  background:#ff4d88;
-  z-index:9999;
-  border-radius:15px;
-  animation:openCurtain 2s forwards;
-}
-
-@keyframes openCurtain{
-  0%{transform:translate(-50%,-50%) scaleY(1);}
-  100%{transform:translate(-50%,-50%) scaleY(0);}
-}
-
-/* Curtain Close Animation for Page 5 */
-#curtainClose{
-  position:fixed;
-  width:100%;
-  height:0%;
-  background:pink;
-  top:0;
-  left:0;
-  z-index:9999;
-  pointer-events:none;
-}
-
-@keyframes closeCurtain{
-  0%{height:0%;}
-  100%{height:100%;}
-}
-
-/* Pages */
-.page{
-  display:none;
-  padding:100px 20px 50px 20px;
-  box-sizing:border-box;
-}
-
-/* Buttons */
-button{
-  padding:12px 25px;
-  font-size:16px;
-  border:none;
-  border-radius:25px;
-  background:#ff0066;
-  color:white;
-  cursor:pointer;
-  margin-top:20px;
-  transition:0.3s;
-}
-
-button:hover{
-  transform:scale(1.1);
-}
-
-/* Meter */
-#meterBox{
-  width:70%;
-  max-width:400px;
-  margin:20px auto;
-  background:white;
-  border-radius:20px;
   overflow:hidden;
 }
 
-#meter{
+.page{
+  display:none;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+}
+
+.active{
+  display:flex;
+}
+
+.meter-box{
+  width:80%;
+  background:white;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:20px;
+}
+
+.meter{
+  height:30px;
   width:0%;
-  height:25px;
-  background:#ff0066;
-  color:white;
-  line-height:25px;
+  background:red;
   transition:width 0.1s linear;
 }
 
-/* Fade animation */
-.fade{
-  animation:fadeIn 1s;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;}
-  to{opacity:1;}
-}
-
-/* Photo animation */
-.photo{
+button{
+  padding:10px 20px;
+  font-size:18px;
+  border:none;
   border-radius:20px;
-  width:80%;
-  max-width:300px;
-  animation:float 3s ease-in-out infinite alternate;
-}
-
-@keyframes float{
-  from{transform:translateY(0);}
-  to{transform:translateY(-20px);}
-}
-
-/* Hearts */
-#hearts{
-  position:fixed;
-  width:100%;
-  height:100%;
-  top:0;
-  left:0;
-  pointer-events:none;
-}
-
-.heart{
-  position:absolute;
-  animation:rise linear infinite;
-}
-
-@keyframes rise{
-  0%{transform:translateY(100vh);opacity:1;}
-  100%{transform:translateY(-10vh);opacity:0;}
-}
-
-/* Responsive Text */
-h1,h2{
-  margin:10px;
-  word-wrap:break-word;
-}
-
-@media screen and (max-width:768px){
-  h1{
-    font-size:6vw;
-  }
-  h2{
-    font-size:5vw;
-  }
-  #meterBox{
-    width:90%;
-  }
-  .photo{
-    width:90%;
-  }
-  button{
-    font-size:14px;
-    padding:10px 20px;
-  }
+  background:red;
+  color:white;
+  margin-top:20px;
+  cursor:pointer;
 }
 </style>
 </head>
+
 <body>
 
-<div id="curtain"></div>
-
-<audio id="loadingSound" src="loading.mp3"></audio>
-<audio id="funnySound" src="funny.mp3"></audio>
-<audio id="loveMusic" src="love.mp3" loop></audio>
-
-<!-- Page 1 -->
-<div id="page1" class="page fade" style="display:block;">
-  <h1>⚠️ We Need To Talk...</h1>
-  <button onclick="goPage2()">Next</button>
+<!-- PAGE 1 -->
+<div id="page1" class="page active">
+  <h1>Welcome My Love 💞</h1>
+  <button onclick="startLove()">Start</button>
 </div>
 
-<!-- Page 2 -->
-<div id="page2" class="page fade">
-  <h2>Checking Relationship Status...</h2>
-  <div id="meterBox">
-    <div id="meter">0%</div>
+<!-- PAGE 2 -->
+<div id="page2" class="page">
+  <h2>Loading Love Meter... ❤️</h2>
+
+  <div class="meter-box">
+    <div id="meter" class="meter"></div>
   </div>
+
+  <button id="nextBtn" style="display:none;" onclick="nextPage()">Next 💕</button>
 </div>
 
-<!-- Page 3 -->
-<div id="page3" class="page fade">
-  <h2>Actually… Onnu illa Summa dhan😜</h2>
-  <div id="prankContent" style="display:none;">
-    <img src="funny.jpg" class="photo">
-    <p>Click Next 😂</p>
-    <button onclick="goPage4()">Next</button>
-  </div>
+<!-- PAGE 3 -->
+<div id="page3" class="page">
+  <h1>LOVE YOU MAMA💞</h1>
 </div>
 
-<!-- Page 4 -->
-<div id="page4" class="page fade">
-  <h1>Happy Valentine’s Day ❤️</h1>
-  <h2>LOVE YOU MAMA💞</h2>
-  <button onclick="goPage5()">Next</button>
-</div>
-
-<!-- Page 5 -->
-<div id="page5" class="page fade">
-  <h1>First Valentine’s, first of forever💞</h1>
-  <img src="ourphoto.jpeg" class="photo">
-</div>
-
-<div id="hearts"></div>
-<div id="curtainClose"></div>
+<!-- MUSIC -->
+<audio id="bgMusic" src="loading.mp3"></audio>
 
 <script>
-const loadingSound=document.getElementById("loadingSound");
-const funnySound=document.getElementById("funnySound");
-const loveMusic=document.getElementById("loveMusic");
-const meter=document.getElementById("meter");
-const heartsContainer=document.getElementById("hearts");
-const curtainClose=document.getElementById("curtainClose");
 
-function safePlay(audio){
-  audio.play().catch(()=>{});
-}
+let music = document.getElementById("bgMusic");
 
-function show(id){
-  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-  document.getElementById(id).style.display="block";
-}
+function startLove(){
 
-// Page 2: meter fills over 15 seconds + loading music
-function goPage2(){
-  show("page2");
-  safePlay(loadingSound);
+  document.getElementById("page1").classList.remove("active");
+  document.getElementById("page2").classList.add("active");
 
-  let width=0;
-  const totalTime=15000; // 15 seconds
-  const intervalTime=100; // update every 0.1s
-  const increment=100/(totalTime/intervalTime); // % per step
+  let meter = document.getElementById("meter");
 
-  const interval=setInterval(()=>{
-    width+=increment;
-    if(width>=100){
-      width=100;
+  // Start music immediately (because button clicked)
+  music.play();
+
+  let width = 0;
+
+  let interval = setInterval(function(){
+
+    if(width >= 100){
       clearInterval(interval);
-      loadingSound.pause();
-      setTimeout(goPage3,500);
+
+      // Stop music exactly when meter completes
+      music.pause();
+      music.currentTime = 0;
+
+      document.getElementById("nextBtn").style.display="inline-block";
     }
-    meter.style.width=width+"%";
-    meter.innerHTML=Math.floor(width)+"%";
-  }, intervalTime);
+    else{
+      width += 100/150;  // 150 steps = 15 seconds
+      meter.style.width = width + "%";
+    }
+
+  },100); // 100ms × 150 = 15 seconds
 }
 
-function goPage3(){
-  show("page3");
-  setTimeout(()=>{
-    document.getElementById("prankContent").style.display="block";
-    safePlay(funnySound);
-  },2000);
+function nextPage(){
+  document.getElementById("page2").classList.remove("active");
+  document.getElementById("page3").classList.add("active");
 }
 
-function goPage4(){
-  show("page4");
-  safePlay(loveMusic);
-  startHearts();
-}
-
-function goPage5(){
-  show("page5");
-  startHearts();
-
-  // Auto-close page 5 after 15 seconds with curtain animation
-  setTimeout(()=>{
-    curtainClose.style.animation="closeCurtain 2s forwards";
-    loveMusic.pause();
-    heartsContainer.innerHTML="";
-  },15000);
-}
-
-function startHearts(){
-  heartsContainer.innerHTML="";
-  for(let i=0;i<60;i++){
-    let heart=document.createElement("div");
-    heart.className="heart";
-    heart.innerHTML="❤️";
-    heart.style.left=Math.random()*100+"%";
-    heart.style.fontSize=(Math.random()*25 + 15)+"px";
-    heart.style.animationDuration=(Math.random()*3 + 4)+"s";
-    heart.style.animationDelay=(Math.random()*5)+"s";
-    heartsContainer.appendChild(heart);
-  }
-}
 </script>
 
 </body>
