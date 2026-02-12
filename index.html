@@ -85,6 +85,31 @@ button{
   0%{transform:translateY(100vh);opacity:1;}
   100%{transform:translateY(-10vh);opacity:0;}
 }
+
+/* Closing Effect */
+#closingScreen{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:black;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:28px;
+  opacity:0;
+  transform:scaleY(0);
+  transform-origin:top;
+  transition:all 2s ease-in-out;
+  z-index:9999;
+}
+
+#closingScreen.show{
+  opacity:1;
+  transform:scaleY(1);
+}
 </style>
 </head>
 <body>
@@ -93,18 +118,18 @@ button{
 <audio id="funnySound" src="funny.mp3"></audio>
 <audio id="loveMusic" src="love.mp3" loop></audio>
 
-<!-- 1️⃣ Countdown Page -->
+<!-- 1 Countdown -->
 <div id="page1" class="page" style="display:block;">
   <div id="count">1</div>
 </div>
 
-<!-- 2️⃣ We Need To Talk -->
-<div id="page2" class="page">>
+<!-- 2 We Need To Talk -->
+<div id="page2" class="page">
   <h1>We Need To Talk...😤</h1>
   <button onclick="goPage3()">Next</button>
 </div>
 
-<!-- 3️⃣ Loading Page -->
+<!-- 3 Loading -->
 <div id="page3" class="page">
   <h2>Checking Relationship Status...</h2>
   <div id="meterBox">
@@ -115,9 +140,9 @@ button{
   </div>
 </div>
 
-<!-- 4️⃣ Prank Page -->
+<!-- 4 Prank -->
 <div id="page4" class="page">
-  <h2>Actually… Onnu illa Summa dhan😜</h2>
+  <h2>Actually… Onnu illa Summa dhan 😜</h2>
   <div id="prankContent" style="display:none;">
     <img src="funny.jpg" width="260">
     <p>Click Next 😂</p>
@@ -125,17 +150,22 @@ button{
   </div>
 </div>
 
-<!-- 5️⃣ Valentine Page -->
+<!-- 5 Valentine -->
 <div id="page5" class="page">
   <h1>Happy Valentine’s Day ❤️</h1>
-  <h2>LOVE YOU MAMA🫂 </h2>
+  <h2>LOVE YOU MAMA🫂</h2>
   <button onclick="goPage6()">Next</button>
 </div>
 
-<!-- 6️⃣ Photo Page -->
+<!-- 6 Photo -->
 <div id="page6" class="page">
-  <h1>vFirst Valentine’s, first of forever. 💞</h1>
+  <h1>First Valentine’s, first of forever💞</h1>
   <img src="ourphoto.jpeg" width="260" class="photo">
+</div>
+
+<!-- Closing Screen -->
+<div id="closingScreen">
+  To Be Continued… With You ❤️
 </div>
 
 <div id="hearts"></div>
@@ -156,7 +186,7 @@ function safePlay(audio){
   audio.play().catch(()=>{});
 }
 
-/* Countdown 1 to 5 */
+/* Countdown */
 let count=1;
 let counter=setInterval(()=>{
   document.getElementById("count").innerText=count;
@@ -167,17 +197,15 @@ let counter=setInterval(()=>{
   count++;
 },1000);
 
-/* Go to Loading */
 function goPage3(){
   show("page3");
   startLoading();
 }
 
-/* 15 sec loading */
 function startLoading(){
   let width=0;
-  let duration=15000; // 15 sec
-  let intervalTime=150; // smoother animation
+  let duration=15000;
+  let intervalTime=150;
   let totalSteps=duration/intervalTime;
   let step=100/totalSteps;
 
@@ -196,7 +224,6 @@ function startLoading(){
   },intervalTime);
 }
 
-/* Prank */
 function goPage4(){
   show("page4");
   setTimeout(()=>{
@@ -205,20 +232,28 @@ function goPage4(){
   },2000);
 }
 
-/* Valentine */
 function goPage5(){
   show("page5");
   safePlay(loveMusic);
   startHearts();
 }
 
-/* Photo */
 function goPage6(){
   show("page6");
   startHearts();
+
+  // 15 seconds after photo → closing animation
+  setTimeout(()=>{
+    document.getElementById("closingScreen").classList.add("show");
+  },15000);
+
+  // After 20 seconds → exit website
+  setTimeout(()=>{
+    window.location.href="https://google.com";
+  },20000);
 }
 
-/* Hearts full screen random */
+/* Hearts */
 function startHearts(){
   const container=document.getElementById("hearts");
   container.innerHTML="";
